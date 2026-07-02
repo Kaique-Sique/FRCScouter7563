@@ -7,11 +7,11 @@ from app.core import config
 def get_connection():
 
     return psycopg2.connect(
-        dbname=config.dbname,
-        user=config.user,
-        password=config.password,
-        host=config.host,
-        port=config.port
+        dbname=config.DB_NAME,
+        user=config.DB_USER,
+        password=config.DB_PASSWORD,
+        host=config.DB_HOST,
+        port=config.DB_PORT
     )
 
 
