@@ -3,8 +3,6 @@ from app.services.tba_services import get_tbaClient
 
 
 router = APIRouter(prefix="/teams", tags=["Teams"])
-tbaClient = get_tbaClient()
-
 
 # =========================================================
 # TEAM  (single team) -- must come BEFORE the generic

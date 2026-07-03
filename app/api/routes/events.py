@@ -2,7 +2,6 @@ from fastapi import APIRouter, Depends
 from app.services.tba_services import get_tbaClient
 
 router = APIRouter(prefix="/events", tags=["Events"])
-tba = get_tbaClient()
 
 # =========================================================
 # EVENTS  (by year)
