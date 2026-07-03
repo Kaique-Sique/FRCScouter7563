@@ -1,14 +1,14 @@
 import os
 from dotenv import load_dotenv
 
-
-load_dotenv()
+if os.path.exists(".env"):
+    load_dotenv()
 
 
 def must_getenv(key: str) -> str:
     value = os.getenv(key)
     if value is None or value.strip() == "":
-        raise ValueError(f"variable {key} is not set in the environment")
+        raise ValueError(f"Variable {key} is not set in the environment")
     return value
 
 # TBA configuration
@@ -22,6 +22,5 @@ DB_PASSWORD = must_getenv("DB_PASSWORD")
 DB_HOST = must_getenv("DB_HOST")
 DB_PORT = must_getenv("DB_PORT")
 
-
-# FRC_YEAR is set to 2026 by default, but can be overridden by an environment variable.
+# Optional has a default value
 FRC_YEAR = int(os.getenv("FRC_YEAR", "2026"))
