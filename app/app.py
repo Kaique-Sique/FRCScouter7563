@@ -1,8 +1,13 @@
 #libs imports
 from fastapi import FastAPI
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
 
 # Routes imports
-#from app.api.routes import ()
+from app.api.routes import (
+    teams,
+    events
+)
 
 # tools imports
 from app.core import db
@@ -15,6 +20,7 @@ app = FastAPI(
 
 tba_client = get_tbaClient()
 tba_collector = get_tba_collector()
+app.mount("/static", StaticFiles(directory="app/static"), name="static")
 
 # =========================
 # ROUTES
@@ -22,10 +28,20 @@ tba_collector = get_tba_collector()
 
 '''include here all projets
             routes          '''
+app.include_router(teams.router) # host:8000 /teams/ 
+app.include_router(events.router) # host:8000 /events/ 
 
 
+# =========================
+# FAVICON 
+# =========================
 
-@app.get("/")
+@app.get("/favicon.ico", include_in_schema=False)
+async def favicon():
+    return FileResponse("app/static/favicon.ico")
+
+
+@app.head("/")
 def home():
     '''
     Docstring for home route. This route is used to test if the API is running.
