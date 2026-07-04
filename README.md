@@ -1,5 +1,12 @@
 # FRCScouter7563
 
+[![Last Commit](https://img.shields.io/github/last-commit/Kaique-Sique/FRCScouter7563?color=informational)](https://github.com/Kaique-Sique/FRCScouter7563/commits/main)
+[![License: MIT](https://img.shields.io/github/license/Kaique-Sique/FRCScouter7563?color=blue)](LICENSE)
+[![Python](https://img.shields.io/badge/python-3.11%2B-blue)](requirements.txt)
+[![FastAPI](https://img.shields.io/badge/framework-FastAPI-009688)](https://fastapi.tiangolo.com/)
+
+🌐 **Idioma:** [🇧🇷 Português](README.md) | [🇺🇸 English](README.en.md)
+
 API de scouting e dados para a temporada **FRC 2025 — Reefscape**, desenvolvida pela equipe **Megazord 7563** (Jundiaí, SP, Brasil).
 
 O projeto é um backend em **FastAPI + PostgreSQL** com dois grandes blocos de funcionalidade:
