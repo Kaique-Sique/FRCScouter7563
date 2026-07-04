@@ -1,3 +1,19 @@
+"""Team-related endpoints, proxied from The Blue Alliance (TBA) API.
+
+Every handler here is a thin pass-through to a corresponding method on the
+shared ``TBAClient`` (see :mod:`app.services.tba_services`) — no local
+database access happens in this module.
+
+.. important::
+    Route ordering matters. FastAPI matches routes in registration order,
+    and ``/{page_num}`` / ``/{year}/{page_num}`` below would otherwise
+    shadow more specific paths like ``/team/{team_key}`` (both are
+    single-segment paths from the router's point of view once the
+    ``/teams`` prefix is stripped). The specific ``/team/...`` routes are
+    therefore declared **before** the generic paginated ``/{page_num}``
+    and ``/{year}/{page_num}`` routes at the bottom of this file.
+"""
+
 from fastapi import APIRouter, Depends
 from app.services.tba_services import get_tbaClient
 

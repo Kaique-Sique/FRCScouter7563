@@ -1,3 +1,11 @@
+"""Event-related endpoints, proxied from The Blue Alliance (TBA) API.
+
+Covers both year-level listings (all events in a season) and single-event
+detail endpoints (alliances, awards, matches, rankings, OPRs, insights,
+predictions, teams, media). Every handler is a thin pass-through to the
+shared ``TBAClient`` (see :mod:`app.services.tba_services`).
+"""
+
 from fastapi import APIRouter, Depends
 from app.services.tba_services import get_tbaClient
 

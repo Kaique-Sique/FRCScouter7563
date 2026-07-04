@@ -1,3 +1,11 @@
+"""District-related endpoints, proxied from The Blue Alliance (TBA) API.
+
+Covers per-year district listings and per-district detail endpoints
+(events, teams, rankings, awards, advancement, history, insights). Every
+handler is a thin pass-through to the shared ``TBAClient`` (see
+:mod:`app.services.tba_services`).
+"""
+
 from fastapi import APIRouter, Depends
 from app.services.tba_services import get_tbaClient
 

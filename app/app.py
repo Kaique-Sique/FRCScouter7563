@@ -1,3 +1,19 @@
+"""FastAPI application factory / entry module.
+
+This module creates and configures the FRCScouter7563 FastAPI application:
+
+- Instantiates the singleton ``TBAClient`` / ``TBACollector`` used to talk to
+  The Blue Alliance (TBA) API (see :mod:`app.services.tba_services`).
+- Mounts the ``/static`` directory (favicon, etc).
+- Registers every route module under :mod:`app.api.routes` as an
+  ``APIRouter``.
+- Exposes a couple of lightweight health-check endpoints
+  (``/status-db`` and ``/status-tba``).
+
+The ASGI app object created here (``app``) is what Uvicorn serves; see
+``main.py`` for how the server is launched.
+"""
+
 #libs imports
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
@@ -60,7 +76,16 @@ def home():
 @app.get("/status-db")
 def test_Connection_database():
     '''
-    Docstring for test_Connection_database route. This route is used to test if the database is running.
+    Health-check for the PostgreSQL database.
+
+    Attempts to open a raw connection via :func:`app.core.db.get_connection`.
+    GET /status-db
+
+    :return: ``{"status": "Online"}`` if the connection succeeds, otherwise
+        ``{"status": "Offline"}``. The connection is opened and immediately
+        discarded (not explicitly closed) — this endpoint is only meant as a
+        cheap connectivity probe, not for production monitoring.
+    :rtype: dict
     '''
     try:
         db.get_connection()
@@ -71,7 +96,14 @@ def test_Connection_database():
 @app.get("/status-tba")
 def test_Connection_tba():
     '''
-    Docstring for test_Connection_tba route. This route is used to test if the TBA API is running.
+    Health-check for The Blue Alliance (TBA) API.
+
+    Proxies to the TBA ``/status`` endpoint via the shared ``TBAClient``.
+    GET /status-tba
+
+    :return: The raw TBA status payload (API version, current season,
+        whether the season is "down" for maintenance, etc).
+    :rtype: dict
     '''
     tba_client = get_tbaClient()
     return tba_client.get_status()

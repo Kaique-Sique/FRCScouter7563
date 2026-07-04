@@ -1,3 +1,12 @@
+"""Insight-related endpoints, proxied from The Blue Alliance (TBA) API.
+
+Insights are TBA-computed statistics (leaderboards, notable performances,
+streaks, timeseries) that can be scoped by year, category, and/or
+district. Every handler is a thin pass-through to the shared ``TBAClient``
+(see :mod:`app.services.tba_services`). Pass ``year=0`` where supported to
+request all-time data.
+"""
+
 from fastapi import APIRouter, Depends
 from app.services.tba_services import get_tbaClient
 
