@@ -5,6 +5,7 @@ from fastapi.responses import FileResponse
 
 # Routes imports
 from app.api.routes import (
+    scout,
     teams,
     events,
     districts,
@@ -38,6 +39,7 @@ app.include_router(districts.router) # host:8000 /districts/
 app.include_router(matchs.router) # host:8000 /matchs/ 
 app.include_router(insights.router) # host:8000 /insights/ 
 app.include_router(regional_advancement.router) # host:8000 /regional_advancement/ 
+app.include_router(scout.router) # host:8000 /scout/ 
 
 # =========================
 # FAVICON 

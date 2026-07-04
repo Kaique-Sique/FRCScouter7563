@@ -3,19 +3,6 @@
 -- PostgreSQL
 -- ==========================================
 
--- --------------------------
--- USERS
--- --------------------------
-CREATE TABLE users (
-    id SERIAL PRIMARY KEY,
-
-    username INTEGER UNIQUE NOT NULL,      -- Número da equipe do scouter
-    password_hash TEXT NOT NULL,
-
-    role VARCHAR(20) DEFAULT 'scouter',
-
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
 
 -- --------------------------
 -- AUTO SCOUT
