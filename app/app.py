@@ -41,7 +41,6 @@ app = FastAPI(
 
 tba_client = get_tbaClient()
 tba_collector = get_tba_collector()
-app.mount("/static", StaticFiles(directory="app/static"), name="static")
 
 # =========================
 # ROUTES
@@ -58,12 +57,14 @@ app.include_router(regional_advancement.router) # host:8000 /regional_advancemen
 app.include_router(scout.router) # host:8000 /scout/ 
 
 # =========================
-# FAVICON 
+# ReadTheDocs Site
 # =========================
 
-@app.get("/favicon.ico", include_in_schema=False)
-async def favicon():
-    return FileResponse("app/static/favicon.ico")
+app.mount(
+    "/ReadTheDocs", 
+    StaticFiles(directory="site", html=True),
+    name="ReadTheDocs"
+)
 
 
 @app.head("/")

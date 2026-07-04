@@ -1,10 +1,9 @@
-# Banco de dados — FRCScouter7563
+# DATABASE — FRCScouter7563
 
-O banco de dados é **PostgreSQL** e armazena apenas os dados de scouting coletados pela própria equipe (dados vindos do The Blue Alliance nunca são persistidos localmente — são sempre buscados on-demand através da `TBAClient`).
+The database is **PostgreSQL** and stores only the scouting data collected by the team itself (data coming from The Blue Alliance is never persisted locally — it's always fetched on-demand through `TBAClient`).
 
-O DDL completo está em [`sql/database-schema.sql`](../sql/database-schema.sql). Este documento descreve cada tabela campo a campo.
 
-## Diagrama lógico
+## Logical diagram
 
 ```
 auto_scout_reefscape           teleop_scout_reefscape           pit_scout
@@ -37,98 +36,98 @@ auto_scout_reefscape           teleop_scout_reefscape           pit_scout
 
 ## `auto_scout_reefscape`
 
-Uma linha por combinação (evento, partida, time): o que aquele robô fez durante o período **autônomo** da temporada 2025 Reefscape.
+One row per (event, match, team) combination: what that robot did during the **autonomous** period of the 2025 Reefscape season.
 
-| Coluna             | Tipo             | Default | Descrição                                                                 |
-|--------------------|------------------|---------|-----------------------------------------------------------------------------|
-| `id`               | `SERIAL`         | —       | Chave primária.                                                             |
-| `event_key`        | `VARCHAR(50)`    | —       | Chave do evento na TBA (ex.: `2025sao`). `NOT NULL`.                        |
-| `match_key`        | `VARCHAR(50)`    | —       | Chave da partida na TBA (ex.: `2025sao_qm12`). `NOT NULL`.                  |
-| `team_key`         | `VARCHAR(50)`    | —       | Chave do time na TBA (ex.: `frc7563`). `NOT NULL`.                          |
-| `year`             | `INTEGER`        | —       | Ano da temporada. `NOT NULL`.                                               |
-| `l1`               | `INTEGER`        | `0`     | Coral marcado no nível 1 do reef durante o autônomo.                        |
-| `l2`               | `INTEGER`        | `0`     | Coral marcado no nível 2.                                                   |
-| `l3`               | `INTEGER`        | `0`     | Coral marcado no nível 3.                                                   |
-| `l4`               | `INTEGER`        | `0`     | Coral marcado no nível 4.                                                   |
-| `coral_misseds`    | `INTEGER`        | `0`     | Quantidade de tentativas de marcar coral que falharam.                      |
-| `coral_precision`  | `DECIMAL(5,2)`   | `0`     | Precisão de marcação de coral (%), com `CHECK (0 <= valor <= 100)`.         |
-| `algae_removed`    | `INTEGER`        | `0`     | Algas removidas do reef.                                                    |
-| `algae_net`        | `INTEGER`        | `0`     | Algas marcadas na rede (net).                                               |
-| `algae_processor`  | `INTEGER`        | `0`     | Algas marcadas no processador.                                              |
-| `region_scored`    | `JSONB`          | —       | Payload livre descrevendo *onde* no campo a pontuação ocorreu.              |
-| `score`            | `INTEGER`        | `0`     | Pontuação estimada de autônomo atribuída ao time.                           |
-| `startline`        | `BOOLEAN`        | `FALSE` | Se o robô saiu da linha de partida (mobilidade).                            |
-| `notes`            | `TEXT`           | —       | Observações livres do scout.                                                |
-| `created_at`       | `TIMESTAMP`      | `CURRENT_TIMESTAMP` | Data/hora de criação do registro.                                |
+| Column             | Type             | Default | Description                                                                |
+|--------------------|------------------|---------|-------------------------------------------------------------------------------|
+| `id`               | `SERIAL`         | —       | Primary key.                                                                   |
+| `event_key`        | `VARCHAR(50)`    | —       | TBA event key (e.g. `2025sao`). `NOT NULL`.                                    |
+| `match_key`        | `VARCHAR(50)`    | —       | TBA match key (e.g. `2025sao_qm12`). `NOT NULL`.                               |
+| `team_key`         | `VARCHAR(50)`    | —       | TBA team key (e.g. `frc7563`). `NOT NULL`.                                     |
+| `year`             | `INTEGER`        | —       | Season year. `NOT NULL`.                                                       |
+| `l1`               | `INTEGER`        | `0`     | Coral scored on reef level 1 during auto.                                      |
+| `l2`               | `INTEGER`        | `0`     | Coral scored on level 2.                                                       |
+| `l3`               | `INTEGER`        | `0`     | Coral scored on level 3.                                                       |
+| `l4`               | `INTEGER`        | `0`     | Coral scored on level 4.                                                       |
+| `coral_misseds`    | `INTEGER`        | `0`     | Number of failed coral scoring attempts.                                       |
+| `coral_precision`  | `DECIMAL(5,2)`   | `0`     | Coral scoring accuracy (%), with `CHECK (0 <= value <= 100)`.                  |
+| `algae_removed`    | `INTEGER`        | `0`     | Algae removed from the reef.                                                   |
+| `algae_net`        | `INTEGER`        | `0`     | Algae scored in the net.                                                       |
+| `algae_processor`  | `INTEGER`        | `0`     | Algae scored in the processor.                                                 |
+| `region_scored`    | `JSONB`          | —       | Free-form payload describing *where* on the field scoring occurred.           |
+| `score`            | `INTEGER`        | `0`     | Estimated auto score contribution assigned to the team.                        |
+| `startline`        | `BOOLEAN`        | `FALSE` | Whether the robot left the starting line (mobility).                          |
+| `notes`            | `TEXT`           | —       | Free-text scouting notes.                                                      |
+| `created_at`       | `TIMESTAMP`      | `CURRENT_TIMESTAMP` | Record creation timestamp.                                        |
 
 **Constraints:**
-- `uq_auto_match_team`: `UNIQUE (event_key, match_key, team_key)` — impede duas entradas para o mesmo time na mesma partida do mesmo evento.
-- `CHECK` em `coral_precision` garantindo o intervalo `[0, 100]`.
+- `uq_auto_match_team`: `UNIQUE (event_key, match_key, team_key)` — prevents two entries for the same team in the same match of the same event.
+- `CHECK` on `coral_precision` enforcing the `[0, 100]` range.
 
 ---
 
 ## `teleop_scout_reefscape`
 
-Uma linha por combinação (evento, partida, time): o que aquele robô fez durante o período **teleoperado** e a **subida final (climb)**.
+One row per (event, match, team) combination: what that robot did during the **teleop** period and the **endgame climb**.
 
-| Coluna                    | Tipo             | Default | Descrição                                                              |
-|---------------------------|------------------|---------|---------------------------------------------------------------------------|
-| `id`                       | `SERIAL`         | —       | Chave primária.                                                            |
-| `event_key`                | `VARCHAR(50)`    | —       | Chave do evento na TBA. `NOT NULL`.                                        |
-| `match_key`                | `VARCHAR(50)`    | —       | Chave da partida na TBA. `NOT NULL`.                                       |
-| `team_key`                 | `VARCHAR(50)`    | —       | Chave do time na TBA. `NOT NULL`.                                          |
-| `year`                     | `INTEGER`        | —       | Ano da temporada. `NOT NULL`.                                              |
-| `l1`..`l4`                  | `INTEGER`        | `0`     | Coral marcado em cada nível do reef durante o teleop.                      |
-| `coral_misseds`            | `INTEGER`        | `0`     | Tentativas de marcar coral que falharam.                                   |
-| `coral_precision`          | `DECIMAL(5,2)`   | `0`     | Precisão de marcação de coral (%), `CHECK (0 <= valor <= 100)`.            |
-| `algae_removed`            | `INTEGER`        | `0`     | Algas removidas do reef.                                                   |
-| `algae_net`                | `INTEGER`        | `0`     | Algas marcadas na rede.                                                    |
-| `algae_processor`          | `INTEGER`        | `0`     | Algas marcadas no processador.                                             |
-| `climb`                    | `VARCHAR(30)`    | —       | Resultado da subida no endgame (texto livre, ex.: `"deep"`, `"shallow"`, `"park"`, `"none"`). |
-| `collected_coral_floor`    | `BOOLEAN`        | `FALSE` | Se o robô coletou coral do chão.                                           |
-| `collected_coral_station`  | `BOOLEAN`        | `FALSE` | Se o robô coletou coral da estação do operador humano.                     |
-| `collected_algae_reef`     | `BOOLEAN`        | `FALSE` | Se o robô coletou algas do reef.                                           |
-| `issues`                   | `BOOLEAN`        | `FALSE` | Se o robô apresentou algum problema/falha.                                 |
-| `issues_notes`             | `TEXT`           | —       | Descrição livre do problema, se houver.                                    |
-| `defended`                 | `BOOLEAN`        | `FALSE` | Se o robô fez defesa durante a partida.                                    |
-| `driver_rating`            | `INTEGER`        | —       | Nota subjetiva de habilidade do piloto (sem limites impostos pelo schema). |
-| `score`                    | `INTEGER`        | `0`     | Pontuação estimada de teleop atribuída ao time.                            |
-| `notes`                    | `TEXT`           | —       | Observações livres do scout.                                               |
-| `created_at`               | `TIMESTAMP`      | `CURRENT_TIMESTAMP` | Data/hora de criação do registro.                               |
+| Column                    | Type             | Default | Description                                                            |
+|---------------------------|------------------|---------|-----------------------------------------------------------------------------|
+| `id`                       | `SERIAL`         | —       | Primary key.                                                                 |
+| `event_key`                | `VARCHAR(50)`    | —       | TBA event key. `NOT NULL`.                                                   |
+| `match_key`                | `VARCHAR(50)`    | —       | TBA match key. `NOT NULL`.                                                   |
+| `team_key`                 | `VARCHAR(50)`    | —       | TBA team key. `NOT NULL`.                                                    |
+| `year`                     | `INTEGER`        | —       | Season year. `NOT NULL`.                                                     |
+| `l1`..`l4`                  | `INTEGER`        | `0`     | Coral scored on each reef level during teleop.                              |
+| `coral_misseds`            | `INTEGER`        | `0`     | Failed coral scoring attempts.                                              |
+| `coral_precision`          | `DECIMAL(5,2)`   | `0`     | Coral scoring accuracy (%), `CHECK (0 <= value <= 100)`.                    |
+| `algae_removed`            | `INTEGER`        | `0`     | Algae removed from the reef.                                                |
+| `algae_net`                | `INTEGER`        | `0`     | Algae scored in the net.                                                    |
+| `algae_processor`          | `INTEGER`        | `0`     | Algae scored in the processor.                                              |
+| `climb`                    | `VARCHAR(30)`    | —       | Endgame climb result (free text, e.g. `"deep"`, `"shallow"`, `"park"`, `"none"`). |
+| `collected_coral_floor`    | `BOOLEAN`        | `FALSE` | Whether the robot picked up coral from the floor.                          |
+| `collected_coral_station`  | `BOOLEAN`        | `FALSE` | Whether the robot picked up coral from the human player station.           |
+| `collected_algae_reef`     | `BOOLEAN`        | `FALSE` | Whether the robot picked algae off the reef.                               |
+| `issues`                   | `BOOLEAN`        | `FALSE` | Whether the robot had any issue/malfunction.                               |
+| `issues_notes`             | `TEXT`           | —       | Free-text description of the issue, if any.                                |
+| `defended`                 | `BOOLEAN`        | `FALSE` | Whether the robot played defense during the match.                         |
+| `driver_rating`            | `INTEGER`        | —       | Subjective driver-skill rating (no bounds enforced by the schema).         |
+| `score`                    | `INTEGER`        | `0`     | Estimated teleop score contribution assigned to the team.                  |
+| `notes`                    | `TEXT`           | —       | Free-text scouting notes.                                                   |
+| `created_at`               | `TIMESTAMP`      | `CURRENT_TIMESTAMP` | Record creation timestamp.                                     |
 
 **Constraints:**
 - `uq_teleop_match_team`: `UNIQUE (event_key, match_key, team_key)`.
-- `CHECK` em `coral_precision` garantindo o intervalo `[0, 100]`.
+- `CHECK` on `coral_precision` enforcing the `[0, 100]` range.
 
 ---
 
 ## `pit_scout`
 
-Uma linha por (evento, time): dados coletados no **pit** antes/durante o evento — descrição do robô e uma foto.
+One row per (event, team): data collected in the **pit** before/during the event — robot description and a photo.
 
-| Coluna         | Tipo          | Default | Descrição                                                   |
-|----------------|---------------|---------|-----------------------------------------------------------------|
-| `id`           | `SERIAL`      | —       | Chave primária.                                                  |
-| `team_key`     | `VARCHAR(50)` | —       | Chave do time na TBA. `UNIQUE`, `NOT NULL`.                      |
-| `description`  | `TEXT`        | —       | Descrição livre do robô/estratégia da equipe.                    |
-| `img_url`      | `TEXT`        | —       | URL de uma foto do robô.                                         |
-| `created_at`   | `TIMESTAMP`   | `CURRENT_TIMESTAMP` | Data/hora de criação do registro.                       |
+| Column         | Type          | Default | Description                                                  |
+|----------------|---------------|---------|------------------------------------------------------------------|
+| `id`           | `SERIAL`      | —       | Primary key.                                                       |
+| `team_key`     | `VARCHAR(50)` | —       | TBA team key. `UNIQUE`, `NOT NULL`.                                |
+| `description`  | `TEXT`        | —       | Free-text description of the robot/team strategy.                  |
+| `img_url`      | `TEXT`        | —       | URL to a photo of the robot.                                       |
+| `created_at`   | `TIMESTAMP`   | `CURRENT_TIMESTAMP` | Record creation timestamp.                                |
 
-> ⚠️ Note que, ao contrário das outras duas tabelas, `pit_scout` define
-> `team_key` como `UNIQUE` **global** (não `UNIQUE(event_key, team_key)`) —
-> e nem sequer possui uma coluna `event_key`. Isso significa que, tal como o
-> schema está definido hoje, **só é possível existir um único registro de
-> pit scouting por time em todo o histórico do banco**, mesmo que o código
-> em `app/api/routes/scout.py` trate `pit_scout` como se tivesse uma coluna
-> `event_key` e uma chave composta `event_key_team_key` (veja "Problemas
-> conhecidos" no README principal).
+> ⚠️ Note that, unlike the other two tables, `pit_scout` defines
+> `team_key` as **globally** `UNIQUE` (not `UNIQUE(event_key, team_key)`) —
+> and doesn't even have an `event_key` column. This means that, as the
+> schema is currently defined, **only one pit scouting record can exist
+> per team across the entire history of the database**, even though the
+> code in `app/api/routes/scout.py` treats `pit_scout` as if it had an
+> `event_key` column and a composite `event_key_team_key` key (see "Known
+> issues" in the main README).
 
 ---
 
-## Como aplicar o schema
+## How to apply the schema
 
 ```bash
 psql -h $DB_HOST -p $DB_PORT -U $DB_USER -d $DB_NAME -f sql/database-schema.sql
 ```
 
-O script apenas executa três `CREATE TABLE`; não há `DROP TABLE IF EXISTS` nem migrações — rodá-lo mais de uma vez contra o mesmo banco falhará com erro de tabela já existente. Para ambientes que evoluem o schema, recomenda-se adotar uma ferramenta de migração (ex.: Alembic) no futuro.
+The script only runs three `CREATE TABLE` statements; there's no `DROP TABLE IF EXISTS` or migration tooling — running it more than once against the same database will fail with a "table already exists" error. For environments where the schema evolves over time, adopting a migration tool (e.g. Alembic) going forward is recommended.

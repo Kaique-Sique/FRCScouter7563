@@ -2,10 +2,8 @@
 
 [![License](https://img.shields.io/badge/License-MIT-blue)](https://github.com/Kaique-Sique/FRCScouter7563/blob/main/LICENSE) 
 ![Last Commit](https://img.shields.io/github/last-commit/Kaique-Sique/FRCScouter7563)
-[![Python](https://img.shields.io/badge/python-3.11%2B-blue)](requirements.txt)
+![Python](https://img.shields.io/badge/python-3.11%2B-blue)
 [![FastAPI](https://img.shields.io/badge/framework-FastAPI-009688)](https://fastapi.tiangolo.com/)
-
-🌐 **Language:** [🇧🇷 Português](README.md) | [🇺🇸 English](README.en.md)
 
 Scouting and data API for the **FRC 2025 — Reefscape** season, built by team **Megazord 7563** (Jundiaí, SP, Brazil).
 
@@ -14,8 +12,9 @@ The project is a **FastAPI + PostgreSQL** backend with two major feature blocks:
 1. **The Blue Alliance (TBA) API proxy** — teams, events, districts, matches, insights, and regional advancement, all consumed through the team's own [`BlueAlliancePy`](https://github.com/Kaique-Sique/BlueAlliancePy) library.
 2. **In-house scouting** — endpoints to record and query on-field scouting data (autonomous, teleop, and pit scouting), persisted in the team's own PostgreSQL database.
 
-> 📄 For the full endpoint reference, see [`docs/API.md`](docs/API.md).
-> 🗄️ For the database schema, see [`docs/DATABASE.md`](docs/DATABASE.md).
+> 📄 For the full endpoint reference, see [`docs/API.md`](/ReadTheDocs/API).
+> 
+> 🗄️ For the database schema, see [`docs/DATABASE.md`](/ReadTheDocs/DATABASE).
 
 ---
 
@@ -145,7 +144,7 @@ Reading and validation of these variables happens in `app/core/config.py`: missi
 
 ## Database
 
-The schema lives in [`sql/database-schema.sql`](sql/database-schema.sql) and creates three tables:
+The schema lives in sql/database-schema.sql and creates three tables:
 
 - `auto_scout_reefscape` — autonomous period data.
 - `teleop_scout_reefscape` — teleop period + endgame climb data.
@@ -157,7 +156,7 @@ To apply the schema to an empty PostgreSQL database:
 psql -h $DB_HOST -p $DB_PORT -U $DB_USER -d $DB_NAME -f sql/database-schema.sql
 ```
 
-See [`docs/DATABASE.md`](docs/DATABASE.md) for a field-by-field description of each table.
+See [`docs/DATABASE.md`](ReadTheDocs/DATABASE) for a field-by-field description of each table.
 
 ## Running the application
 
@@ -196,7 +195,7 @@ With the server running, FastAPI's auto-generated interactive docs are available
 | `/regional_advancement`     | The Blue Alliance         | Championship advancement, regional rankings                   |
 | `/scout`                    | PostgreSQL (in-house)     | Scouting CRUD: autonomous, teleop, and pit                     |
 
-The full reference — with HTTP method, parameters, and a description of each of the dozens of routes — is in [`docs/API.md`](docs/API.md).
+The full reference — with HTTP method, parameters, and a description of each of the dozens of routes — is in [`docs/API.md`](ReadTheDocs/API).
 
 ## Known issues
 

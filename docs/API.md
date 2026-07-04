@@ -1,165 +1,165 @@
-# Referência da API — FRCScouter7563
+# API Reference — FRCScouter7563
 
-Todas as rotas abaixo estão registradas em `app/app.py`. As rotas dos grupos **Teams**, **Events**, **Districts**, **Matchs**, **Insights** e **Regional advancement** são um espelho (thin proxy) da [API v3 do The Blue Alliance](https://www.thebluealliance.com/apidocs/v3); consulte a documentação oficial da TBA para o formato exato de cada payload de resposta. O grupo **Scout** é a única parte que lê/escreve no PostgreSQL da equipe.
+All routes below are registered in `app/app.py`. The **Teams**, **Events**, **Districts**, **Matchs**, **Insights**, and **Regional advancement** route groups are a thin proxy/mirror of the [The Blue Alliance API v3](https://www.thebluealliance.com/apidocs/v3); check the official TBA documentation for the exact shape of each response payload. **Scout** is the only group that reads/writes to the team's own PostgreSQL database.
 
-> Base URL local: `http://localhost:8000`
-> Documentação interativa: `/docs` (Swagger) e `/redoc`
+> Local base URL: `http://localhost:8000`
+> Interactive docs: `/docs` (Swagger) and `/redoc`
 
 ---
 
-## Diagnóstico
+## Diagnostics
 
-| Método | Rota          | Descrição                                    |
-|--------|---------------|-----------------------------------------------|
-| HEAD   | `/`           | Testa se a API está no ar.                    |
-| GET    | `/status-db`  | Testa a conexão com o PostgreSQL.             |
-| GET    | `/status-tba` | Repassa o status (`/status`) da API do TBA.   |
-| GET    | `/favicon.ico`| Serve o favicon estático.                     |
+| Method | Route          | Description                                    |
+|--------|----------------|--------------------------------------------------|
+| HEAD   | `/`            | Checks whether the API is up.                     |
+| GET    | `/status-db`   | Tests the PostgreSQL connection.                  |
+| GET    | `/status-tba`  | Forwards the TBA API status (`/status`).          |
+| GET    | `/favicon.ico` | Serves the static favicon.                        |
 
 ---
 
 ## Teams (`/teams`)
 
-| Método | Rota                                                      | Descrição                                                             |
-|--------|-----------------------------------------------------------|-------------------------------------------------------------------------|
-| GET    | `/teams/team/{team_key}`                                  | Objeto `Team` completo.                                                 |
-| GET    | `/teams/team/{team_key}/simple`                            | Objeto `Team_Simple`.                                                   |
-| GET    | `/teams/team/{team_key}/years_participated`                | Anos em que o time competiu em pelo menos um evento.                    |
-| GET    | `/teams/team/{team_key}/districts`                         | Distritos que o time participou, por ano.                               |
-| GET    | `/teams/team/{team_key}/robots`                            | Pares ano/nome do robô para cada ano com robô nomeado.                  |
-| GET    | `/teams/team/{team_key}/history`                           | Histórico completo (eventos e prêmios).                                 |
-| GET    | `/teams/team/{team_key}/social_media`                      | Objetos de redes sociais do time.                                       |
-| GET    | `/teams/team/{team_key}/awards`                            | Todos os prêmios ganhos pelo time (todos os tempos).                    |
-| GET    | `/teams/team/{team_key}/awards/{year}`                     | Prêmios ganhos em um ano específico.                                    |
-| GET    | `/teams/team/{team_key}/media/{year}`                      | Mídias do time em um ano específico.                                    |
-| GET    | `/teams/team/{team_key}/media/tag/{media_tag}`             | Mídias filtradas por tag.                                                |
-| GET    | `/teams/team/{team_key}/media/tag/{media_tag}/{year}`      | Mídias filtradas por tag e ano.                                          |
-| GET    | `/teams/team/{team_key}/events`                            | Todos os eventos que o time já competiu.                                |
-| GET    | `/teams/team/{team_key}/events/simple`                     | Versão simplificada da lista de eventos.                                |
-| GET    | `/teams/team/{team_key}/events/keys`                       | Apenas as chaves dos eventos.                                           |
-| GET    | `/teams/team/{team_key}/events/{year}/statuses`            | Mapa chave-valor de status do time por evento, em um ano.                |
-| GET    | `/teams/team/{team_key}/events/{year}/keys`                | Chaves dos eventos disputados em um ano.                                 |
-| GET    | `/teams/team/{team_key}/events/{year}`                     | Eventos (forma simplificada) disputados em um ano.                       |
-| GET    | `/teams/team/{team_key}/event/{event_key}/matches`         | Partidas do time em um evento específico.                                |
-| GET    | `/teams/team/{team_key}/event/{event_key}/matches/simple`  | Versão simplificada das partidas.                                        |
-| GET    | `/teams/team/{team_key}/event/{event_key}/matches/keys`    | Chaves das partidas.                                                     |
-| GET    | `/teams/team/{team_key}/matches/{year}/keys`                | Chaves de todas as partidas do time em um ano.                           |
-| GET    | `/teams/team/{team_key}/matches/{year}`                     | Todas as partidas do time em um ano.                                     |
-| GET    | `/teams/team/{team_key}/event/{event_key}/awards`           | Prêmios do time em um evento específico.                                 |
-| GET    | `/teams/team/{team_key}/event/{event_key}/status`           | Rank e status de competição do time em um evento.                        |
-| GET    | `/teams/{page_num}/simple`                                  | Lista `Team_Simple` paginada (grupos de 500).                            |
-| GET    | `/teams/{page_num}/keys`                                    | Lista de chaves de times, paginada.                                      |
-| GET    | `/teams/{page_num}`                                         | Lista de objetos `Team`, paginada.                                       |
-| GET    | `/teams/{year}/{page_num}/simple`                            | Times (forma simplificada) que competiram em um ano, paginado.           |
-| GET    | `/teams/{year}/{page_num}/keys`                              | Chaves de times que competiram em um ano, paginado.                      |
-| GET    | `/teams/{year}/{page_num}`                                   | Times que competiram em um ano, paginado.                                |
+| Method | Route                                                       | Description                                                              |
+|--------|--------------------------------------------------------------|------------------------------------------------------------------------------|
+| GET    | `/teams/team/{team_key}`                                     | Full `Team` object.                                                          |
+| GET    | `/teams/team/{team_key}/simple`                               | `Team_Simple` object.                                                        |
+| GET    | `/teams/team/{team_key}/years_participated`                   | Years the team competed in at least one event.                              |
+| GET    | `/teams/team/{team_key}/districts`                            | Districts the team has participated in, by year.                            |
+| GET    | `/teams/team/{team_key}/robots`                               | Year/robot-name pairs for every year the team named a robot.                |
+| GET    | `/teams/team/{team_key}/history`                              | Full history (events and awards).                                           |
+| GET    | `/teams/team/{team_key}/social_media`                         | The team's social media objects.                                             |
+| GET    | `/teams/team/{team_key}/awards`                               | All awards the team has won (all time).                                     |
+| GET    | `/teams/team/{team_key}/awards/{year}`                        | Awards won in a specific year.                                               |
+| GET    | `/teams/team/{team_key}/media/{year}`                         | Team media for a specific year.                                              |
+| GET    | `/teams/team/{team_key}/media/tag/{media_tag}`                | Media filtered by tag.                                                       |
+| GET    | `/teams/team/{team_key}/media/tag/{media_tag}/{year}`         | Media filtered by tag and year.                                              |
+| GET    | `/teams/team/{team_key}/events`                               | All events the team has ever competed at.                                   |
+| GET    | `/teams/team/{team_key}/events/simple`                        | Short-form version of the events list.                                      |
+| GET    | `/teams/team/{team_key}/events/keys`                          | Event keys only.                                                             |
+| GET    | `/teams/team/{team_key}/events/{year}/statuses`               | Key-value map of the team's status per event, for a given year.             |
+| GET    | `/teams/team/{team_key}/events/{year}/keys`                   | Event keys for events competed at in a given year.                          |
+| GET    | `/teams/team/{team_key}/events/{year}`                        | Events (short form) competed at in a given year.                            |
+| GET    | `/teams/team/{team_key}/event/{event_key}/matches`            | The team's matches at a specific event.                                     |
+| GET    | `/teams/team/{team_key}/event/{event_key}/matches/simple`     | Short-form version of the matches.                                          |
+| GET    | `/teams/team/{team_key}/event/{event_key}/matches/keys`       | Match keys.                                                                  |
+| GET    | `/teams/team/{team_key}/matches/{year}/keys`                  | Keys for all of the team's matches in a given year.                         |
+| GET    | `/teams/team/{team_key}/matches/{year}`                       | All of the team's matches in a given year.                                  |
+| GET    | `/teams/team/{team_key}/event/{event_key}/awards`             | Awards the team won at a specific event.                                    |
+| GET    | `/teams/team/{team_key}/event/{event_key}/status`             | The team's competition rank and status at an event.                         |
+| GET    | `/teams/{page_num}/simple`                                    | Paginated `Team_Simple` list (groups of 500).                               |
+| GET    | `/teams/{page_num}/keys`                                      | Paginated list of team keys.                                                 |
+| GET    | `/teams/{page_num}`                                           | Paginated list of `Team` objects.                                            |
+| GET    | `/teams/{year}/{page_num}/simple`                             | Teams (short form) that competed in a given year, paginated.                |
+| GET    | `/teams/{year}/{page_num}/keys`                               | Keys of teams that competed in a given year, paginated.                     |
+| GET    | `/teams/{year}/{page_num}`                                    | Teams that competed in a given year, paginated.                             |
 
-> ⚠️ As rotas específicas (`/team/{team_key}/...`) são registradas **antes** das rotas genéricas de paginação (`/{page_num}`, `/{year}/{page_num}`) propositalmente — veja o comentário no topo de `app/api/routes/teams.py`.
+> ⚠️ The specific routes (`/team/{team_key}/...`) are registered **before** the generic paginated routes (`/{page_num}`, `/{year}/{page_num}`) on purpose — see the comment at the top of `app/api/routes/teams.py`.
 
 ## Events (`/events`)
 
-| Método | Rota                                                          | Descrição                                                       |
-|--------|-----------------------------------------------------------------|--------------------------------------------------------------------|
-| GET    | `/events/{year}`                                                 | Todos os eventos de um ano.                                        |
-| GET    | `/events/{year}/simple`                                          | Versão simplificada.                                                |
-| GET    | `/events/{year}/keys`                                            | Apenas as chaves dos eventos.                                       |
-| GET    | `/events/event/{event_key}`                                     | Objeto `Event` completo.                                            |
-| GET    | `/events/event/{event_key}/simple`                                | Objeto `Event_Simple`.                                              |
-| GET    | `/events/event/{event_key}/alliances`                             | Alianças da fase eliminatória.                                      |
-| GET    | `/events/event/{event_key}/awards`                                | Prêmios do evento.                                                  |
-| GET    | `/events/event/{event_key}/matches`                               | Todas as partidas do evento.                                        |
-| GET    | `/events/event/{event_key}/matches/simple`                        | Versão simplificada das partidas.                                   |
-| GET    | `/events/event/{event_key}/matches/keys`                          | Chaves das partidas.                                                |
-| GET    | `/events/event/{event_key}/matches/timeseries`                    | Chaves de partidas com dados Zebra timeseries.                      |
-| GET    | `/events/event/{event_key}/rankings`                              | Rankings dos times no evento.                                       |
-| GET    | `/events/event/{event_key}/oprs`                                  | OPR, DPR e CCWM dos times no evento.                                 |
-| GET    | `/events/event/{event_key}/coprs`                                  | Component OPRs dos times.                                           |
-| GET    | `/events/event/{event_key}/dprs`                                   | DPRs dos times (rota nomeada `district_points` na implementação).    |
-| GET    | `/events/event/{event_key}/advancement_points`                     | Pontos de avanço distrital/regional para o Championship.            |
-| GET    | `/events/event/{event_key}/regional_champs_pool_points`            | Pontos para o pool de classificação do Championship (2025+, Regionais).|
-| GET    | `/events/event/{event_key}/event_insights`                         | Insights específicos do ano (qual e playoff).                       |
-| GET    | `/events/event/{event_key}/predictions`                            | Previsões de partidas geradas pelo TBA.                              |
-| GET    | `/events/event/{event_key}/teams`                                  | Times que competiram no evento.                                     |
-| GET    | `/events/event/{event_key}/teams/simple`                           | Versão simplificada dos times.                                      |
-| GET    | `/events/event/{event_key}/teams/keys`                             | Chaves dos times.                                                    |
-| GET    | `/events/event/{event_key}/teams/statuses`                         | Mapa chave-valor de status de todos os times no evento.              |
-| GET    | `/events/event/{event_key}/team_media`                             | Mídias de todos os times no evento.                                  |
+| Method | Route                                                              | Description                                                             |
+|--------|-----------------------------------------------------------------------|------------------------------------------------------------------------------|
+| GET    | `/events/{year}`                                                        | All events for a given year.                                                 |
+| GET    | `/events/{year}/simple`                                                 | Short-form version.                                                          |
+| GET    | `/events/{year}/keys`                                                   | Event keys only.                                                             |
+| GET    | `/events/event/{event_key}`                                            | Full `Event` object.                                                         |
+| GET    | `/events/event/{event_key}/simple`                                       | `Event_Simple` object.                                                       |
+| GET    | `/events/event/{event_key}/alliances`                                    | Elimination-round alliances.                                                 |
+| GET    | `/events/event/{event_key}/awards`                                       | Awards from the event.                                                       |
+| GET    | `/events/event/{event_key}/matches`                                      | All matches for the event.                                                   |
+| GET    | `/events/event/{event_key}/matches/simple`                               | Short-form version of the matches.                                           |
+| GET    | `/events/event/{event_key}/matches/keys`                                 | Match keys.                                                                  |
+| GET    | `/events/event/{event_key}/matches/timeseries`                           | Match keys that have Zebra timeseries data.                                  |
+| GET    | `/events/event/{event_key}/rankings`                                     | Team rankings at the event.                                                  |
+| GET    | `/events/event/{event_key}/oprs`                                         | OPR, DPR, and CCWM for teams at the event.                                   |
+| GET    | `/events/event/{event_key}/coprs`                                         | Component OPRs for teams.                                                    |
+| GET    | `/events/event/{event_key}/dprs`                                          | DPRs for teams (named `district_points` in the implementation).             |
+| GET    | `/events/event/{event_key}/advancement_points`                            | District/regional advancement points toward the Championship.               |
+| GET    | `/events/event/{event_key}/regional_champs_pool_points`                   | Points toward the Championship qualification pool (2025+ Regionals).        |
+| GET    | `/events/event/{event_key}/event_insights`                                | Year-specific insights (qual and playoff).                                   |
+| GET    | `/events/event/{event_key}/predictions`                                   | TBA-generated match predictions.                                             |
+| GET    | `/events/event/{event_key}/teams`                                         | Teams that competed at the event.                                            |
+| GET    | `/events/event/{event_key}/teams/simple`                                  | Short-form version of the teams.                                             |
+| GET    | `/events/event/{event_key}/teams/keys`                                    | Team keys.                                                                    |
+| GET    | `/events/event/{event_key}/teams/statuses`                                | Key-value map of every team's status at the event.                          |
+| GET    | `/events/event/{event_key}/team_media`                                    | Media for every team at the event.                                           |
 
 ## Districts (`/districts`)
 
-| Método | Rota                                                        | Descrição                                                    |
-|--------|---------------------------------------------------------------|------------------------------------------------------------------|
-| GET    | `/districts/{year}`                                           | Distritos e suas chaves em um ano.                                |
-| GET    | `/districts/{district_key}/events`                             | Eventos de um distrito.                                          |
-| GET    | `/districts/{district_key}/events/simple`                      | Versão simplificada.                                              |
-| GET    | `/districts/{district_key}/events/keys`                        | Apenas as chaves dos eventos.                                     |
-| GET    | `/districts/{district_key}/teams`                              | Times de um distrito.                                             |
-| GET    | `/districts/{district_key}/teams/simple`                       | Versão simplificada.                                              |
-| GET    | `/districts/{district_key}/teams/keys`                         | Apenas as chaves dos times.                                       |
-| GET    | `/districts/{district_key}/rankings`                            | Rankings distritais dos times.                                    |
-| GET    | `/districts/{district_key}/awards`                              | Todos os prêmios do distrito.                                     |
-| GET    | `/districts/{district_key}/advancement`                         | Informação de avanço por time no distrito.                        |
-| GET    | `/districts/{district_abbreviation}/history`                    | Histórico do distrito ao longo dos anos.                          |
-| GET    | `/districts/{district_abbreviation}/dcmp_history`                | Eventos e prêmios do DCMP (District Championship).                |
-| GET    | `/districts/{district_abbreviation}/insights`                    | Insights do distrito.                                             |
+| Method | Route                                                        | Description                                                       |
+|--------|------------------------------------------------------------------|-------------------------------------------------------------------------|
+| GET    | `/districts/{year}`                                                | Districts and their keys for a given year.                              |
+| GET    | `/districts/{district_key}/events`                                  | Events in a district.                                                    |
+| GET    | `/districts/{district_key}/events/simple`                          | Short-form version.                                                      |
+| GET    | `/districts/{district_key}/events/keys`                            | Event keys only.                                                         |
+| GET    | `/districts/{district_key}/teams`                                   | Teams in a district.                                                     |
+| GET    | `/districts/{district_key}/teams/simple`                            | Short-form version.                                                      |
+| GET    | `/districts/{district_key}/teams/keys`                              | Team keys only.                                                          |
+| GET    | `/districts/{district_key}/rankings`                                 | Team district rankings.                                                  |
+| GET    | `/districts/{district_key}/awards`                                   | All awards in the district.                                              |
+| GET    | `/districts/{district_key}/advancement`                              | Per-team advancement info within the district.                          |
+| GET    | `/districts/{district_abbreviation}/history`                         | District history across years.                                          |
+| GET    | `/districts/{district_abbreviation}/dcmp_history`                     | DCMP (District Championship) events and awards.                         |
+| GET    | `/districts/{district_abbreviation}/insights`                        | District insights.                                                       |
 
 ## Matchs (`/matchs`)
 
-| Método | Rota                                     | Descrição                                            |
-|--------|--------------------------------------------|---------------------------------------------------------|
-| GET    | `/matchs/{match_key}`                       | Objeto `Match` completo.                                 |
-| GET    | `/matchs/{match_key}/simple`                | Objeto `Match_Simple`.                                   |
-| GET    | `/matchs/{match_key}/timeseries`             | Dados Zebra timeseries específicos do jogo, da partida.  |
-| GET    | `/matchs/{match_key}/zebra_motionworks`      | Dados posicionais Zebra MotionWorks da partida.          |
+| Method | Route                                      | Description                                                |
+|--------|------------------------------------------------|-----------------------------------------------------------------|
+| GET    | `/matchs/{match_key}`                            | Full `Match` object.                                             |
+| GET    | `/matchs/{match_key}/simple`                     | `Match_Simple` object.                                           |
+| GET    | `/matchs/{match_key}/timeseries`                  | Game-specific Zebra timeseries data for the match.               |
+| GET    | `/matchs/{match_key}/zebra_motionworks`           | Zebra MotionWorks positional data for the match.                 |
 
 ## Insights (`/insights`)
 
-| Método | Rota                                                             | Descrição                                                       |
-|--------|---------------------------------------------------------------------|----------------------------------------------------------------------|
-| GET    | `/insights/leaderboards/{year}`                                      | Objetos `LeaderboardInsight` (`year=0` para todos os tempos).         |
-| GET    | `/insights/notables/{year}`                                          | Objetos `NotablesInsight` (`year=0` para todos os tempos).            |
-| GET    | `/insights/{year}`                                                   | Todos os objetos `Insight` de um ano, em todas as categorias.         |
-| GET    | `/insights/{year}/{category}`                                        | Insights de um ano filtrados por categoria (`leaderboard`/`streak`/`timeseries`).|
-| GET    | `/insights/{year}/district/{district_abbreviation}`                   | Insights de um ano, filtrados por distrito.                            |
-| GET    | `/insights/{year}/{category}/district/{district_abbreviation}`        | Insights V2 filtrados por ano, categoria e distrito.                   |
+| Method | Route                                                                | Description                                                            |
+|--------|--------------------------------------------------------------------------|------------------------------------------------------------------------------|
+| GET    | `/insights/leaderboards/{year}`                                            | `LeaderboardInsight` objects (`year=0` for all-time).                        |
+| GET    | `/insights/notables/{year}`                                                | `NotablesInsight` objects (`year=0` for all-time).                           |
+| GET    | `/insights/{year}`                                                         | All `Insight` objects for a year, across every category.                    |
+| GET    | `/insights/{year}/{category}`                                             | Insights for a year filtered by category (`leaderboard`/`streak`/`timeseries`).|
+| GET    | `/insights/{year}/district/{district_abbreviation}`                        | Insights for a year, filtered by district.                                  |
+| GET    | `/insights/{year}/{category}/district/{district_abbreviation}`             | InsightV2 filtered by year, category, and district.                         |
 
 ## Regional advancement (`/regional_advancement`)
 
-| Método | Rota                                             | Descrição                                                          |
-|--------|-----------------------------------------------------|------------------------------------------------------------------------|
-| GET    | `/regional_advancement/{year}`                       | Informação de avanço ao FIRST Championship, por time.                  |
-| GET    | `/regional_advancement/{year}/rankings`               | Rankings dos times no pool regional, para um ano.                       |
-| GET    | `/regional_advancement/{year}/rankings/{max_num}`     | Top N rankings do pool regional (recorta o resultado da rota anterior). |
+| Method | Route                                                | Description                                                              |
+|--------|----------------------------------------------------------|-------------------------------------------------------------------------------|
+| GET    | `/regional_advancement/{year}`                              | Per-team advancement info to the FIRST Championship.                          |
+| GET    | `/regional_advancement/{year}/rankings`                     | Team rankings in the regional pool, for a given year.                         |
+| GET    | `/regional_advancement/{year}/rankings/{max_num}`           | Top N regional-pool rankings (slices the result of the route above).          |
 
 ---
 
 ## Scout (`/scout`)
 
-Este é o único grupo de rotas que acessa o banco de dados PostgreSQL da equipe (via `app/core/db.py`), em vez de apenas repassar chamadas ao TBA. Veja [`DATABASE.md`](DATABASE.md) para o schema das tabelas envolvidas.
+This is the only route group that accesses the team's own PostgreSQL database (via `app/core/db.py`), rather than simply forwarding calls to TBA. See [`DATABASE.md`](DATABASE.md) for the schema of the tables involved.
 
-> ⚠️ **Atenção:** os endpoints "por scout key" abaixo dependem de colunas
-> (`scout_auto_key`, `scout_teleop_key`, `pit_scout_key`) que **não existem**
-> em `sql/database-schema.sql` no estado atual do repositório. Veja a seção
-> "Problemas conhecidos" no README principal antes de usar essas rotas em
-> produção.
+> ⚠️ **Warning:** the "by scout key" endpoints below rely on columns
+> (`scout_auto_key`, `scout_teleop_key`, `pit_scout_key`) that **do not
+> exist** in `sql/database-schema.sql` as currently checked into the
+> repository. See the "Known issues" section in the main README before
+> using these routes in production.
 
-### Auto scout (autônomo)
+### Auto scout (autonomous)
 
-| Método | Rota                                                  | Descrição                                                          |
-|--------|----------------------------------------------------------|-------------------------------------------------------------------------|
-| POST   | `/scout/add/auto/2025`                                    | Cria uma entrada de scouting do período autônomo.                       |
-| GET    | `/scout/auto/scout_key/{scout_key}`                        | Busca por chave composta `match_key_team_key`.                          |
-| GET    | `/scout/auto/event/{event_key}`                            | Todas as entradas de um evento.                                         |
-| GET    | `/scout/auto/match/{match_key}`                            | Todas as entradas (todos os times) de uma partida.                      |
-| GET    | `/scout/auto/match/{match_key}/team/{team_key}`             | Entrada de um time em uma partida específica.                           |
-| GET    | `/scout/auto/team/{team_key}`                              | Todas as entradas já registradas de um time.                            |
-| GET    | `/scout/auto/team/{team_key}/event/{event_key}`             | Entradas de um time dentro de um evento.                                |
-| GET    | `/scout/auto/team/{team_key}/match/{match_key}`             | Entrada de um time em uma partida (equivalente ao endpoint acima com parâmetros invertidos). |
-| GET    | `/scout/auto/matches/keys`                                 | Lista as `match_key` com entrada de auto scouting (sem `DISTINCT`).      |
-| DELETE | `/scout/delete/auto/match/{match_key}/team/{team_key}`       | Remove a entrada de um time em uma partida.                             |
-| DELETE | `/scout/delete/auto/key/{scout_key}`                        | Remove pela chave composta.                                             |
+| Method | Route                                                    | Description                                                                    |
+|--------|---------------------------------------------------------------|--------------------------------------------------------------------------------------|
+| POST   | `/scout/add/auto/2025`                                          | Creates a new autonomous-period scouting entry.                                       |
+| GET    | `/scout/auto/scout_key/{scout_key}`                              | Look up by composite key `match_key_team_key`.                                        |
+| GET    | `/scout/auto/event/{event_key}`                                  | All entries for an event.                                                              |
+| GET    | `/scout/auto/match/{match_key}`                                  | All entries (every team) for a match.                                                 |
+| GET    | `/scout/auto/match/{match_key}/team/{team_key}`                   | A single team's entry for a specific match.                                           |
+| GET    | `/scout/auto/team/{team_key}`                                    | Every entry ever recorded for a team.                                                 |
+| GET    | `/scout/auto/team/{team_key}/event/{event_key}`                   | A team's entries within an event.                                                     |
+| GET    | `/scout/auto/team/{team_key}/match/{match_key}`                   | A team's entry for a match (equivalent to the endpoint above with swapped params).     |
+| GET    | `/scout/auto/matches/keys`                                       | Lists the `match_key` values with an auto scouting entry (no `DISTINCT`).             |
+| DELETE | `/scout/delete/auto/match/{match_key}/team/{team_key}`             | Deletes a team's entry for a match.                                                   |
+| DELETE | `/scout/delete/auto/key/{scout_key}`                              | Deletes by composite key.                                                             |
 
-**Corpo da requisição** (`POST /scout/add/auto/2025`), modelo `AutoScout`:
+**Request body** (`POST /scout/add/auto/2025`), `AutoScout` model:
 
 ```json
 {
@@ -176,25 +176,25 @@ Este é o único grupo de rotas que acessa o banco de dados PostgreSQL da equipe
   "region_scored": {"reef_face": "A", "branch": "L2"},
   "score": 10,
   "startline": true,
-  "notes": "Saiu rápido da linha de partida."
+  "notes": "Left the starting line quickly."
 }
 ```
 
-### Teleop scout (teleoperado + endgame)
+### Teleop scout (teleop + endgame)
 
-| Método | Rota                                                        | Descrição                                                     |
-|--------|------------------------------------------------------------------|--------------------------------------------------------------------|
-| POST   | `/scout/add/teleop/2025`                                          | Cria uma entrada de scouting do período teleoperado.                |
-| GET    | `/scout/teleop/scout_key/{scout_key}`                              | Busca por chave composta `match_key_team_key`.                      |
-| GET    | `/scout/teleop/event/{event_key}`                                  | Todas as entradas de um evento.                                     |
-| GET    | `/scout/teleop/match/{match_key}`                                  | Todas as entradas (todos os times) de uma partida.                  |
-| GET    | `/scout/teleop/match/{match_key}/team/{team_key}`                   | Entrada de um time em uma partida específica.                       |
-| GET    | `/scout/teleop/team/{team_key}/event/{event_key}`                   | Entradas de um time dentro de um evento.                            |
-| GET    | `/scout/teleop/matches/keys`                                        | Lista as `match_key` com entrada de teleop scouting (sem `DISTINCT`).|
-| DELETE | `/scout/delete/teleop/match/{match_key}/team/{team_key}`             | Remove a entrada de um time em uma partida.                         |
-| DELETE | `/scout/delete/teleop/key/{scout_key}`                              | Remove pela chave composta.                                         |
+| Method | Route                                                              | Description                                                              |
+|--------|-------------------------------------------------------------------------|--------------------------------------------------------------------------------|
+| POST   | `/scout/add/teleop/2025`                                                  | Creates a new teleop-period scouting entry.                                    |
+| GET    | `/scout/teleop/scout_key/{scout_key}`                                      | Look up by composite key `match_key_team_key`.                                 |
+| GET    | `/scout/teleop/event/{event_key}`                                          | All entries for an event.                                                       |
+| GET    | `/scout/teleop/match/{match_key}`                                          | All entries (every team) for a match.                                          |
+| GET    | `/scout/teleop/match/{match_key}/team/{team_key}`                           | A single team's entry for a specific match.                                    |
+| GET    | `/scout/teleop/team/{team_key}/event/{event_key}`                           | A team's entries within an event.                                              |
+| GET    | `/scout/teleop/matches/keys`                                                | Lists the `match_key` values with a teleop scouting entry (no `DISTINCT`).     |
+| DELETE | `/scout/delete/teleop/match/{match_key}/team/{team_key}`                     | Deletes a team's entry for a match.                                            |
+| DELETE | `/scout/delete/teleop/key/{scout_key}`                                      | Deletes by composite key.                                                      |
 
-**Corpo da requisição** (`POST /scout/add/teleop/2025`), modelo `TeleopScout`:
+**Request body** (`POST /scout/add/teleop/2025`), `TeleopScout` model:
 
 ```json
 {
@@ -217,37 +217,37 @@ Este é o único grupo de rotas que acessa o banco de dados PostgreSQL da equipe
   "defended": false,
   "driver_rating": 4,
   "score": 45,
-  "notes": "Robô consistente, sem intercorrências."
+  "notes": "Consistent robot, no issues."
 }
 ```
 
 ### Pit scout
 
-| Método | Rota                                                    | Descrição                                                      |
-|--------|--------------------------------------------------------------|----------------------------------------------------------------------|
-| POST   | `/scout/add/pit/`                                              | Cria uma entrada de pit scouting.                                     |
-| GET    | `/scout/pit/scout_key/{scout_key}`                              | Busca por chave composta `event_key_team_key`.                        |
-| GET    | `/scout/pit/event/{event_key}`                                  | Todas as entradas de um evento.                                       |
-| GET    | `/scout/pit/team/{team_key}`                                    | Todas as entradas já registradas de um time.                          |
-| GET    | `/scout/pit/team/{team_key}/event/{event_key}`                   | Entrada de um time em um evento específico.                           |
-| GET    | `/scout/pit/events/keys`                                        | Lista as `event_key` distintas com pit scouting (com `DISTINCT`, ordenado). |
-| DELETE | `/scout/delete/pit/team/{team_key}/event/{event_key}`             | Remove a entrada de um time em um evento.                             |
-| DELETE | `/scout/delete/pit/key/{scout_key}`                               | Remove pela chave composta.                                           |
+| Method | Route                                                        | Description                                                              |
+|--------|-------------------------------------------------------------------|--------------------------------------------------------------------------------|
+| POST   | `/scout/add/pit/`                                                    | Creates a new pit scouting entry.                                              |
+| GET    | `/scout/pit/scout_key/{scout_key}`                                    | Look up by composite key `event_key_team_key`.                                 |
+| GET    | `/scout/pit/event/{event_key}`                                        | All entries for an event.                                                       |
+| GET    | `/scout/pit/team/{team_key}`                                          | Every entry ever recorded for a team.                                          |
+| GET    | `/scout/pit/team/{team_key}/event/{event_key}`                         | A team's entry for a specific event.                                           |
+| GET    | `/scout/pit/events/keys`                                              | Lists the distinct `event_key` values with pit scouting (`DISTINCT`, sorted).  |
+| DELETE | `/scout/delete/pit/team/{team_key}/event/{event_key}`                   | Deletes a team's entry for an event.                                           |
+| DELETE | `/scout/delete/pit/key/{scout_key}`                                     | Deletes by composite key.                                                      |
 
-**Corpo da requisição** (`POST /scout/add/pit/`), modelo `PitScout`:
+**Request body** (`POST /scout/add/pit/`), `PitScout` model:
 
 ```json
 {
   "event_key": "2025sao",
   "team_key": "frc7563",
-  "description": "Swerve drive, elevador de 4 estágios, garra de coral e algae.",
-  "img_url": "https://exemplo.com/fotos/frc7563.jpg"
+  "description": "Swerve drive, 4-stage elevator, coral and algae claw.",
+  "img_url": "https://example.com/photos/frc7563.jpg"
 }
 ```
 
-### Respostas de erro (deleção)
+### Error responses (delete)
 
-Todas as rotas `DELETE` retornam:
+All `DELETE` routes return:
 
-- `{"message": "Scout deleted successfully"}` (ou `"Pit scout deleted successfully"`) quando uma linha foi removida.
-- `{"message": "Scout not found"}` (ou `"Pit scout not found"`) quando nenhuma linha correspondia aos parâmetros — **isso é retornado com HTTP 200**, não 404, então clientes precisam checar o corpo da resposta, não apenas o status code.
+- `{"message": "Scout deleted successfully"}` (or `"Pit scout deleted successfully"`) when a row was removed.
+- `{"message": "Scout not found"}` (or `"Pit scout not found"`) when no row matched the parameters — **this is returned with HTTP 200**, not 404, so clients need to check the response body, not just the status code.

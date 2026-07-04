@@ -1,0 +1,24 @@
+site_name: FRCScouter7563
+site_description: Overview of FRCScouter7563 API
+
+theme:
+  name: material
+
+  logo: assets/favicon.png
+  favicon: assets/favicon.png
+
+  palette:
+    - scheme: slate
+      primary: black
+      accent: blue
+
+    - scheme: default
+      primary: blue
+      accent: blue
+
+nav:
+  - HOME: index.md
+  - API: API.md
+  - DATABASE: DATABASE.md
+
+
