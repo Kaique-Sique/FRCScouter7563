@@ -1,11 +1,11 @@
 import psycopg2
+from psycopg2.extras import RealDictCursor
 from contextlib import contextmanager
 
 from app.core import config
 
 
 def get_connection():
-
     return psycopg2.connect(
         dbname=config.DB_NAME,
         user=config.DB_USER,
@@ -24,9 +24,9 @@ def get_cursor(commit: bool = True):
     :param commit: Whether to commit the transaction on success.
     :type commit: bool
     '''
-
     conn = get_connection()
-    cur = conn.cursor()
+
+    cur = conn.cursor(cursor_factory=RealDictCursor)
 
     try:
         yield cur
