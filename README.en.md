@@ -1,7 +1,7 @@
 # FRCScouter7563
 
-[![Last Commit](https://img.shields.io/github/last-commit/Kaique-Sique/FRCScouter7563?color=informational)](https://github.com/Kaique-Sique/FRCScouter7563/commits/main)
-[![License: MIT](https://img.shields.io/github/license/Kaique-Sique/FRCScouter7563?color=blue)](LICENSE)
+[![License](https://img.shields.io/badge/License-MIT-blue)](https://github.com/Kaique-Sique/FRCScouter7563/blob/main/LICENSE) 
+![Last Commit](https://img.shields.io/github/last-commit/Kaique-Sique/FRCScouter7563)
 [![Python](https://img.shields.io/badge/python-3.11%2B-blue)](requirements.txt)
 [![FastAPI](https://img.shields.io/badge/framework-FastAPI-009688)](https://fastapi.tiangolo.com/)
 
