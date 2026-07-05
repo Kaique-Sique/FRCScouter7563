@@ -9,4 +9,4 @@ Scouting and data API for the **FRC 2025 — Reefscape** season, built by team *
 
 The project is a **FastAPI + PostgreSQL** backend with two major feature blocks:
 
-> [Click here](frcscouter7563.onrender.com/ReadTheDocs) For full docs about FRCScouter7563 API 
+> [Click here](https://frcscouter7563.onrender.com/ReadTheDocs) For full docs about FRCScouter7563 API 
