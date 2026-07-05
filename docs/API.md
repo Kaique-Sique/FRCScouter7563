@@ -3,7 +3,8 @@
 All routes below are registered in `app/app.py`. The **Teams**, **Events**, **Districts**, **Matchs**, **Insights**, and **Regional advancement** route groups are a thin proxy/mirror of the [The Blue Alliance API v3](https://www.thebluealliance.com/apidocs/v3); check the official TBA documentation for the exact shape of each response payload. **Scout** is the only group that reads/writes to the team's own PostgreSQL database.
 
 > Local base URL: `http://localhost:8000`
-> Interactive docs: `/docs` (Swagger) and `/redoc`
+> Interactive docs: [`/docs`](/docs) (Swagger) and [`/redoc`](redoc)
+
 
 ---
 

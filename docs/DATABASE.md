@@ -6,14 +6,14 @@ The database is **PostgreSQL** and stores only the scouting data collected by th
 ## Logical diagram
 
 ```
-auto_scout_reefscape           teleop_scout_reefscape           pit_scout
-┌──────────────────────┐       ┌──────────────────────┐        ┌──────────────────────┐
+auto_scout_reefscape             teleop_scout_reefscape           pit_scout
+┌───────────────────────┐       ┌───────────────────────┐        ┌───────────────────────┐
 │ id (PK)               │       │ id (PK)               │        │ id (PK)               │
 │ event_key             │       │ event_key             │        │ team_key (UNIQUE)     │
 │ match_key             │       │ match_key             │        │ description           │
 │ team_key              │       │ team_key              │        │ img_url               │
 │ year                  │       │ year                  │        │ created_at            │
-│ l1..l4                │       │ l1..l4                │        └──────────────────────┘
+│ l1..l4                │       │ l1..l4                │        └───────────────────────┘
 │ coral_misseds         │       │ coral_misseds         │
 │ coral_precision       │       │ coral_precision       │
 │ algae_removed/net/... │       │ algae_removed/net/... │
@@ -24,12 +24,12 @@ auto_scout_reefscape           teleop_scout_reefscape           pit_scout
 │ created_at            │       │ issues / issues_notes │
 │ UNIQUE(event,match,   │       │ defended              │
 │        team)          │       │ driver_rating         │
-└──────────────────────┘       │ score                  │
-                                │ notes                  │
-                                │ created_at             │
-                                │ UNIQUE(event,match,     │
-                                │        team)            │
-                                └──────────────────────┘
+└───────────────────────┘       │ score                 │
+                                │ notes                 │
+                                │ created_at            │
+                                │ UNIQUE(event,match,   │
+                                │        team)          │
+                                └───────────────────────┘
 ```
 
 ---

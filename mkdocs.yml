@@ -1,4 +1,4 @@
-site_name: FRCScouter7563
+site_name: FRCScouter7563 Documentation
 site_description: Overview of FRCScouter7563 API
 
 theme:
@@ -11,14 +11,41 @@ theme:
     - scheme: slate
       primary: black
       accent: blue
+      toggle:
+        icon: material/weather-sunny
+        name: Switch to light mode
 
     - scheme: default
       primary: blue
       accent: blue
+      toggle:
+        icon: material/weather-night
+        name: Switch to dark mode
+
+  features:
+    - navigation.tabs
+    - navigation.top
+    - content.code.copy
+    - toc.integrate
+
+extra_css:
+  - stylesheets/extra.css
 
 nav:
   - HOME: index.md
+  - Overview: OVERVIEW.md
+  - Database: DATABASE.md
   - API: API.md
-  - DATABASE: DATABASE.md
 
+extra:
+  copyright: "© 2026 FRCScouter7563 - https://megazord7563.com.br"
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/Kaique-Sique
+    - icon: fontawesome/brands/instagram
+      link: https://instagram.com/Megazord7563
+    - icon: fontawesome/solid/globe
+      link: https://Megazord7563.com.br
 
